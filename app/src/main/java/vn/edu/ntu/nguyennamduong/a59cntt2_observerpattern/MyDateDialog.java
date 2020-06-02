@@ -8,14 +8,15 @@ import android.widget.DatePicker;
 import java.util.Calendar;
 
 public class MyDateDialog {
-    Calendar calendar;
-    OnMyDateChangeListener onMyDateChangeListener;
     Context context;
+    OnMyDateChangeListener onMyDateChangeListener;
+    Calendar calendar;
 
-    public MyDateDialog(Calendar calendar, OnMyDateChangeListener onMyDateChangeListener, Context context) {
-        this.calendar = calendar;
-        this.onMyDateChangeListener = onMyDateChangeListener;
+
+    public MyDateDialog(Context context, OnMyDateChangeListener onMyDateChangeListener, Calendar calendar) {
         this.context = context;
+        this.onMyDateChangeListener = onMyDateChangeListener;
+        this.calendar = calendar;
     }
 
     public void showDateDialog(){
@@ -23,7 +24,7 @@ public class MyDateDialog {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 calendar.set(year, month, dayOfMonth);
-                onMyDateChangeListener.dateUpdate(calendar);
+                if (onMyDateChangeListener != null) onMyDateChangeListener.dateUpdate(calendar);
             }
         };
         DatePickerDialog datePickerDialog = new DatePickerDialog(context, Listener,
@@ -31,6 +32,7 @@ public class MyDateDialog {
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
         );
+        datePickerDialog.show();
     }
 
     public static interface OnMyDateChangeListener{
